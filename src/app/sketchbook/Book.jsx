@@ -19,8 +19,9 @@ import { degToRad, MathUtils } from "three/src/math/MathUtils";
 import { useAtom } from "jotai";
 import { easing } from "maath";
 
-const page_width = 1.74;
-const page_height = 2.47;
+// the improper width and height was giving matrixWorld error
+const page_width = 1.28;
+const page_height = 1.71;
 const page_depth = 0.003;
 const page_segments = 30;
 const segment_width = page_width / page_segments;
@@ -115,7 +116,7 @@ const pageMaterials = [
 pages.forEach((page) => {
   useTexture.preload(`/sketchbook/${page.front}.png`);
   useTexture.preload(`/sketchbook/${page.back}.png`);
-  useTexture.preload(`/sketchbook/$roughness.png`);
+  useTexture.preload(`/sketchbook/roughness.png`);
 });
 
 const Page = ({ number, front, back, page, opened, bookClosed, ...props }) => {
@@ -145,7 +146,7 @@ const Page = ({ number, front, back, page, opened, bookClosed, ...props }) => {
       // store it in bones array
       bones.push(bone);
 
-      if (i === 0) {
+      if (i == 0) {
         bone.position.x = 0;
       } else {
         bone.position.x = segment_width;
@@ -198,12 +199,12 @@ const Page = ({ number, front, back, page, opened, bookClosed, ...props }) => {
 
     mesh.add(skeleton.bones[0]); // add root bone to mesh
     mesh.bind(skeleton); // bind skeleton to our skinned mesh
-    
+
     return mesh; //return skin mesh so we able to use it
   }, []);
 
   // to see how bones come ip
-  useHelper(skinnedMeshRef, SkeletonHelper, "red");
+  // useHelper(skinnedMeshRef, SkeletonHelper, "red");
 
   // testing effect by manually turning bones
   // useFrame(()=>{
@@ -215,16 +216,16 @@ const Page = ({ number, front, back, page, opened, bookClosed, ...props }) => {
   // })
 
   useFrame((_, delta) => {
-    
     if (!skinnedMeshRef.current) {
       return;
     }
-    
 
     if (lastOpened.current !== opened) {
       turnedAt.current = +new Date();
       lastOpened.current = opened;
     }
+    let turningTime = Math.min(400, new Date() - turnedAt.current) / 400;
+    turningTime = Math.sin(turningTime * Math.PI);
 
     let targetRotation = opened ? -Math.PI / 2.1 : Math.PI / 2.1;
     // reduced angle rage so pages dont flip the wrong way
@@ -240,14 +241,12 @@ const Page = ({ number, front, back, page, opened, bookClosed, ...props }) => {
     for (let i = 0; i < bones.length; i++) {
       const target = i === 0 ? group.current : bones[i];
 
-      let turningTime = Math.min(400, new Date() - turnedAt.current) / 400;
-      turningTime = Math.sin(turningTime * Math.PI);
-      const turningIntensity =
-        Math.sin(i * Math.PI * (1 / bones.length)) * turningTime;
-
       // curve of page
       const insideCurveIntensity = i < 8 ? Math.sin(i * 0.2 + 0.25) : 0;
       const outsideCurveIntensity = i > 8 ? Math.cos(i * 0.3 + 0.09) : 0;
+      const turningIntensity =
+        Math.sin(i * Math.PI * (1 / bones.length)) * turningTime;
+
       let rotationAngle =
         insideCurveStrength * insideCurveIntensity * targetRotation -
         outsideCurveStrength * outsideCurveIntensity * targetRotation +
@@ -255,7 +254,7 @@ const Page = ({ number, front, back, page, opened, bookClosed, ...props }) => {
 
       // to bend the page when turning, we rotate its x axis
       // as sin will return -1 if targetRotation is below 0 and 1 if its above 0
-      let foldRotationAngle = degToRad(Math.sin(targetRotation) * 2);
+      let foldRotationAngle = degToRad(Math.sign(targetRotation) * 2);
 
       // so it goes to normal on close
       if (bookClosed) {
@@ -264,6 +263,7 @@ const Page = ({ number, front, back, page, opened, bookClosed, ...props }) => {
           foldRotationAngle = 0;
         } else {
           rotationAngle = 0;
+          foldRotationAngle = 0;
         }
       }
       easing.dampAngle(
@@ -292,7 +292,7 @@ const Page = ({ number, front, back, page, opened, bookClosed, ...props }) => {
   });
   const [_, setPage] = useAtom(pageAtom);
   const [highlighted, setHighlighted] = useState(false);
-  useCursor(highlighted /*'pointer', 'auto', document.body*/);
+  useCursor(highlighted);
   return (
     <group
       {...props}
@@ -300,16 +300,14 @@ const Page = ({ number, front, back, page, opened, bookClosed, ...props }) => {
       onPointerEnter={(e) => {
         e.stopPropagation();
         setHighlighted(true);
-        console.log("hovered");
       }}
       onPointerLeave={(e) => {
         e.stopPropagation();
         setHighlighted(false);
-        console.log("left hover");
       }}
       onClick={(e) => {
         e.stopPropagation();
-        setPage: (opened ? number : number + 1);
+        setPage(opened ? number : number + 1);
         setHighlighted(false);
       }}
     >
