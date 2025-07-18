@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from "react";
-import { pageAtom } from "./UI";
-import { pages } from "./UI";
+import { pageAtom } from "./interface";
+import { pages } from "./interface";
 import {
   Bone,
   BoxGeometry,
