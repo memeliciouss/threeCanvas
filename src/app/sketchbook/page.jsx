@@ -8,7 +8,7 @@ import { UI } from "./interface";
 
 function App() {
   return (
-    <>
+    <div className="sketchbook">
       <UI />
       <Loader />
       <Canvas shadows camera={{ position: [-0.5, 1, 4], fov: 45 }}
@@ -19,7 +19,7 @@ function App() {
           </Suspense>
         </group>
       </Canvas>
-    </>
+    </div>
   );
 }
 

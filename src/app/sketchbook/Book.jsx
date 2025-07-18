@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { pageAtom } from "./interface";
 import { pages } from "./interface";
 import {
@@ -114,20 +114,32 @@ const pageMaterials = [
 ];
 
 pages.forEach((page) => {
-  useTexture.preload(`/sketchbook/${page.front}.png`);
-  useTexture.preload(`/sketchbook/${page.back}.png`);
+  useTexture.preload(`/sketchbook/${page.front}.webp`);
+  useTexture.preload(`/sketchbook/${page.back}.webp`);
   useTexture.preload(`/sketchbook/roughness.png`);
 });
 
 const Page = ({ number, front, back, page, opened, bookClosed, ...props }) => {
   const [picture1, picture2, pictureRoughness] = useTexture([
-    `/sketchbook/${front}.png`,
-    `/sketchbook/${back}.png`,
+    `/sketchbook/${front}.webp`,
+    `/sketchbook/${back}.webp`,
     ...(number === 0 || number === pages.length - 1
       ? ["sketchbook/roughness.png"]
       : []),
   ]);
 
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    audioRef.current = new Audio("/sketchbook/page_flip.mp3");
+  }, []);
+
+  const playSound = () => {
+    if (!audioRef.current) return;
+    audioRef.current.pause(); // stop current sound if playing
+    audioRef.current.currentTime = 0; // rewind to start
+    audioRef.current.play(); // play again
+  };
   // picture1 and picture2 being the img in front and behind of the current img
   picture1.colorSpace = picture2.colorSpace = SRGBColorSpace;
 
@@ -171,7 +183,7 @@ const Page = ({ number, front, back, page, opened, bookClosed, ...props }) => {
               roughnessMap: pictureRoughness, // custom roughness map
             }
           : {
-              roughness: 0.9, // for glossy effect
+              roughness: 0.1, // for glossy effect
             }),
       }),
       new MeshStandardMaterial({
@@ -182,7 +194,7 @@ const Page = ({ number, front, back, page, opened, bookClosed, ...props }) => {
               roughnessMap: pictureRoughness,
             }
           : {
-              roughness: 0.9,
+              roughness: 0.1,
             }),
       }),
     ];
@@ -232,9 +244,11 @@ const Page = ({ number, front, back, page, opened, bookClosed, ...props }) => {
     // easing effect sometimes made pages flip from opposite sides
 
     // to close book completely on close and not have pages shown
-    if (!bookClosed) {
-      targetRotation += degToRad(number * 0.8);
-    }
+    // if (!bookClosed) {
+    //   targetRotation += degToRad(number * 0.8);
+    // }
+    // but i want pages to show even on book close so
+    targetRotation += degToRad(number * 0.8);
 
     const bones = skinnedMeshRef.current.skeleton.bones;
 
@@ -309,6 +323,7 @@ const Page = ({ number, front, back, page, opened, bookClosed, ...props }) => {
         e.stopPropagation();
         setPage(opened ? number : number + 1);
         setHighlighted(false);
+        playSound();
       }}
     >
       {/* skinnedMesh instead of Mesh
