@@ -7,16 +7,24 @@ import {
   useTexture,
 } from "@react-three/drei";
 import { Book } from "./Book";
-import { useEffect } from "react";
-import { useLoader, useThree } from "@react-three/fiber";
-import { SRGBColorSpace, TextureLoader } from "three";
+import { useEffect, useState } from "react";
+import { useThree } from "@react-three/fiber";
+import { SRGBColorSpace } from "three";
 
 export const Experience = () => {
   const { camera } = useThree();
-  // const envmap = useLoader(TextureLoader, "sketchbook/starmap.jpg");
   useEffect(() => {
-    camera.layers.enable(1);
+    const enableLayers = () => {
+      camera.layers.enable(0);
+      camera.layers.enable(1);
+    };
+
+    enableLayers(); // run on mount
+
+    window.addEventListener("resize", enableLayers);
+    return () => window.removeEventListener("resize", enableLayers);
   }, [camera]);
+
   return (
     <>
       <Float
@@ -25,19 +33,19 @@ export const Experience = () => {
         speed={2}
         rotationIntensity={2}
       >
-        {/* Float to make the whole book have a slight hovering effect */}
         <Book />
       </Float>
+
       <Office />
-      <Turtle/>
+      <Turtle />
+
       <Environment background files={"sketchbook/starmap.exr"} />
+
       <OrbitControls
-        enablePan={true}
+        enablePan
         screenSpacePanning={false}
-        // maxPolarAngle={Math.PI / 2}
         minDistance={1}
         maxDistance={50}
-        // to limit panning, by restricting how far the targer can move
         onChange={(e) => {
           const t = e.target.target;
           t.x = Math.max(-2, Math.min(2, t.x));
@@ -56,8 +64,8 @@ export const Experience = () => {
         shadow-bias={-0.0001}
       />
 
-      {/* <BackgroundImage /> */}
       <ambientLight intensity={1} layers={[1]} />
+
       <mesh rotation-x={-Math.PI / 2} position={[0, -1.5, 0]} receiveShadow>
         <planeGeometry args={[10, 10]} />
         <shadowMaterial transparent opacity={0.25} />
@@ -67,19 +75,17 @@ export const Experience = () => {
 };
 
 export function Office() {
-  const { scene } = useGLTF("/sketchbook/office.glb");
+  const { scene } = useGLTF("/sketchbook/compress_office.glb");
   useEffect(() => {
     scene.traverse((child) => {
       if (child.isMesh) {
         child.layers.set(1);
-      }
-      if (child.isMesh && child.material) {
-        if (child.material.color) {
+        if (child.material?.color) {
           child.material.color.multiplyScalar(0.5);
         }
       }
     });
-  });
+  }, [scene]);
   return (
     <primitive
       object={scene}
@@ -90,15 +96,11 @@ export function Office() {
   );
 }
 
-export function Turtle(){
-  const { scene } = useGLTF("/sketchbook/turtle.glb")
-  return (
-    <primitive
-    object={scene}
-    scale={0.5}
-    position={[-9,-8,8]}/>
-  )
+export function Turtle() {
+  const { scene } = useGLTF("/sketchbook/turtle.glb");
+  return <primitive object={scene} scale={0.5} position={[-9, -8, 8]} />;
 }
+
 export function BackgroundImage() {
   const night = useTexture("/sketchbook/night.png");
   const { scene } = useThree();
@@ -106,6 +108,5 @@ export function BackgroundImage() {
   useEffect(() => {
     scene.background = night;
   }, [night, scene]);
-
   return null;
 }

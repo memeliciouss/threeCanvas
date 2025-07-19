@@ -93,6 +93,7 @@ export default function Navbar() {
         </h3>
 
         <nav style={{ display: "flex", flexDirection: "column", gap: "2rem", position: "relative", zIndex: 2 }}>
+          <StyledLink href="/sketchbook" label="sketchbook" />
           <StyledLink href="/orbs" label="Orbs?" />
           <StyledLink href="/weepingangels" label="Weeping Angels" />
         </nav>

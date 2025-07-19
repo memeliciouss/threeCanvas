@@ -5,6 +5,7 @@ import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
 import { Experience } from "./Experience";
 import { UI } from "./interface";
+import Navbar from "@/components/Navbar";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           </Suspense>
         </group>
       </Canvas>
+      <Navbar/>
     </div>
   );
 }
