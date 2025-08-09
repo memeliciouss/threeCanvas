@@ -75,7 +75,7 @@ export const Experience = () => {
 };
 
 export function Office() {
-  const { scene } = useGLTF("/sketchbook/compress_office.glb");
+  const { scene } = useGLTF("/sketchbook/office.glb");
   useEffect(() => {
     scene.traverse((child) => {
       if (child.isMesh) {

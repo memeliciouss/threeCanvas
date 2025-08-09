@@ -11,7 +11,7 @@ export default function Navbar() {
     const rect = e.currentTarget.getBoundingClientRect();
     setPosition({
       x: e.clientX - rect.left,
-      y: e.clientY - rect.top
+      y: e.clientY - rect.top,
     });
   };
 
@@ -52,7 +52,7 @@ export default function Navbar() {
           display: "flex",
           flexDirection: "column",
           padding: "2rem 1.5rem",
-          fontFamily: "sans-serif",
+          fontFamily: "Palatino Linotype",
           zIndex: 20,
           borderLeft: "1px solid rgba(255, 255, 255, 0.1)",
           overflow: "hidden",
@@ -70,7 +70,8 @@ export default function Navbar() {
               top: position.y,
               width: "500px",
               height: "500px",
-              background: "radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 70%)",
+              background:
+                "radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 70%)",
               borderRadius: "50%",
               transform: "translate(-50%, -50%)",
               pointerEvents: "none",
@@ -78,22 +79,43 @@ export default function Navbar() {
             }}
           />
         )}
-
-        <h3
+        <a
+          href="/"
           style={{
-            marginBottom: "1rem",
-            fontWeight: "600",
-            fontSize: "1.1rem",
-            opacity: 0.85,
+            textDecoration: "none",
+            color: "white",
+            display: "flex",
+            gap: "5px",
+          }}
+        >
+          <img src="icon.ico" style={{ height: "25px", width: "auto" }} />
+          <h3
+            href="/"
+            style={{
+              marginBottom: "1rem",
+              fontWeight: "600",
+              fontSize: "1.1rem",
+              opacity: 0.85,
+              position: "relative",
+              zIndex: 2,
+              marginBottom: "2rem",
+            }}
+          >
+            threeCanvas
+          </h3>
+        </a>
+
+        <nav
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "1.5rem",
             position: "relative",
             zIndex: 2,
           }}
         >
-          threeCanvas
-        </h3>
-
-        <nav style={{ display: "flex", flexDirection: "column", gap: "2rem", position: "relative", zIndex: 2 }}>
-          <StyledLink href="/sketchbook" label="sketchbook" />
+          <StyledLink href="/sketchbook" label="Sketchbook" />
+          <StyledLink href="/starry" label="Ghost Ship" />
           <StyledLink href="/orbs" label="Orbs?" />
           <StyledLink href="/weepingangels" label="Weeping Angels" />
         </nav>
@@ -120,9 +142,6 @@ function StyledLink({ href, label }) {
           fontSize: "0.95rem",
           cursor: "pointer",
           transition: "all 0.3s ease",
-          ':hover': {
-            background: "rgba(255, 255, 255, 0.05)",
-          },
         }}
       >
         {label}
