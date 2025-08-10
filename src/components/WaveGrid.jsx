@@ -36,7 +36,7 @@ export default function WaveGrid() {
       rotation={[Math.PI/2, 0, 0]} // horizontal
     >
       {/* define size of mesh/grid  and number of segments*/}
-      <planeGeometry args={[10, 10, 32, 32]} />
+      <planeGeometry args={[15, 15, 32, 32]} />
       <meshBasicMaterial color="#d0d0d0" wireframe transparent opacity={0.3} />
     </mesh>
   );

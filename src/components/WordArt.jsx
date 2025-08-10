@@ -37,7 +37,7 @@ export default function WordArt() {
       </Text3D>
       <WavePlane />
       <LightPave intensity={10} />
-      <OrbitControls />
+      <OrbitControls enablePan={false} enableZoom={false}/>
     </Canvas>
   );
 }
