@@ -31,8 +31,8 @@ function Object() {
     const color = new THREE.Color();
 
     // for scattering points using Raycasting
-    const numRaysToCast = 100000; // attempts
-    const maxPoints = 3000;    // number of stars to place
+    const numRaysToCast = 10000; // attempts
+    const maxPoints = 4000;    // number of stars to place
 
     const raycaster = new THREE.Raycaster();
     const tempOrigin = new THREE.Vector3(); // Reusable Vector3 for ray origin

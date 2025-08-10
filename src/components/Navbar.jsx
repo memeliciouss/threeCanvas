@@ -22,7 +22,7 @@ export default function Navbar() {
         onClick={() => setOpen(!open)}
         style={{
           position: "fixed",
-          right: open ? "225px" : "5px",
+          right: open ? "255px" : "5px",
           top: "20px",
           background: "rgba(30, 30, 30, 0.5)",
           color: "#fff",
@@ -42,9 +42,9 @@ export default function Navbar() {
         style={{
           position: "fixed",
           top: 0,
-          right: open ? 0 : "-220px",
+          right: open ? 0 : "-250px",
           height: "100vh",
-          width: "220px",
+          width: "250px",
           background: "rgba(20, 20, 20, 0.3)",
           backdropFilter: "blur(10px)",
           color: "#fff",
@@ -52,7 +52,7 @@ export default function Navbar() {
           display: "flex",
           flexDirection: "column",
           padding: "2rem 1.5rem",
-          fontFamily: "Palatino Linotype",
+          fontFamily: "Segoe UI",
           zIndex: 20,
           borderLeft: "1px solid rgba(255, 255, 255, 0.1)",
           overflow: "hidden",
@@ -112,6 +112,7 @@ export default function Navbar() {
             gap: "1.5rem",
             position: "relative",
             zIndex: 2,
+            flexGrow: 1,
           }}
         >
           <StyledLink href="/sketchbook" label="Sketchbook" />
@@ -119,6 +120,64 @@ export default function Navbar() {
           <StyledLink href="/orbs" label="Orbs?" />
           <StyledLink href="/weepingangels" label="Weeping Angels" />
         </nav>
+        <div
+          style={{
+            fontSize: "0.9rem",
+            display: "flex",
+            justifyContent: "space-between",
+            gap: "1rem",
+            position: "relative",
+            zIndex: 2,
+            marginTop: "auto",
+          }}
+        >
+          <a
+            href="https://memelicious-viewport.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <div
+              style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="currentColor"
+                  d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4s-4 1.79-4 4s1.79 4 4 4m0 2c-2.67 0-8 1.34-8 4v1c0 .55.45 1 1 1h14c.55 0 1-.45 1-1v-1c0-2.66-5.33-4-8-4"
+                />
+              </svg>
+              My Corner
+            </div>
+          </a>
+          <a
+            href="https://www.github.com/memeliciouss/threeCanvas"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <div
+              style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill="currentColor"
+                  d="M7.976 0A7.977 7.977 0 0 0 0 7.976c0 3.522 2.3 6.507 5.431 7.584c.392.049.538-.196.538-.392v-1.37c-2.201.49-2.69-1.076-2.69-1.076c-.343-.93-.881-1.175-.881-1.175c-.734-.489.048-.489.048-.489c.783.049 1.224.832 1.224.832c.734 1.223 1.859.88 2.3.685c.048-.538.293-.88.489-1.076c-1.762-.196-3.621-.881-3.621-3.964c0-.88.293-1.566.832-2.153c-.05-.147-.343-.978.098-2.055c0 0 .685-.196 2.201.832c.636-.196 1.322-.245 2.007-.245s1.37.098 2.006.245c1.517-1.027 2.202-.832 2.202-.832c.44 1.077.146 1.908.097 2.104a3.16 3.16 0 0 1 .832 2.153c0 3.083-1.86 3.719-3.62 3.915c.293.244.538.733.538 1.467v2.202c0 .196.146.44.538.392A7.98 7.98 0 0 0 16 7.976C15.951 3.572 12.38 0 7.976 0"
+                />
+              </svg>
+              Github
+            </div>
+          </a>
+        </div>
       </div>
     </>
   );
