@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-export default function Navbar() {
-  const [open, setOpen] = useState(false);
+export default function Navbar({initialOpen=false}) {
+  const [open, setOpen] = useState(initialOpen);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
 

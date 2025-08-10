@@ -2,9 +2,9 @@ import { atom, useAtom } from "jotai";
 
 const pictures = [
   "play",
-  "adventure",
-  "movie",
   "obsession",
+  "movie",
+  "adventure",
   "skullstar",
   "milesMoralLess",
   "reddead",
@@ -19,9 +19,9 @@ const pictures = [
   "w2",
   "w3",
   "w4",
-  "crt",
-  "ghosts",
   "fang",
+  "ghosts",
+  "crt",
   "batman",
   "catos",
   "horse",

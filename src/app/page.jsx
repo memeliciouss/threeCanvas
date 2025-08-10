@@ -6,7 +6,7 @@ import WordArt from '../components/WordArt';
 export default function Home() {
   return (
     <main style={{ width: '100vw', height: '100vh' }}>
-      <Navbar/>
+      <Navbar initialOpen={true}/>
       <WordArt />
     </main>
   );
