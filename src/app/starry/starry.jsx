@@ -1,6 +1,7 @@
+import { Loader } from "@/components/Loader";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { useMemo } from "react";
+import { Suspense, useMemo } from "react";
 import * as THREE from "three";
 
 export default function Starry() {
@@ -8,16 +9,17 @@ export default function Starry() {
     <Canvas>
       <ambientLight intensity={0.5} />
       <directionalLight position={[5, 5, 5]} intensity={0.8} />
-
-      <Object />
-      <StarBG />
-      <OrbitControls enablePan = {false} enableZoom={false}/>
+      <Suspense fallback={<Loader />}>
+        <Object />
+        <StarBG />
+      </Suspense>
+      <OrbitControls enablePan={false} enableZoom={false} />
     </Canvas>
   );
 }
 
 function Object() {
-  const { scene: gltfScene } = useGLTF('starry/endurance.glb');
+  const { scene: gltfScene } = useGLTF("starry/endurance.glb");
 
   // wait for model to load
   if (!gltfScene) {
@@ -32,7 +34,7 @@ function Object() {
 
     // for scattering points using Raycasting
     const numRaysToCast = 10000; // attempts
-    const maxPoints = 4000;    // number of stars to place
+    const maxPoints = 4000; // number of stars to place
 
     const raycaster = new THREE.Raycaster();
     const tempOrigin = new THREE.Vector3(); // Reusable Vector3 for ray origin
@@ -59,11 +61,13 @@ function Object() {
       tempOrigin.z = THREE.MathUtils.randFloat(min.z, max.z);
 
       // random direction for ray
-      tempDirection.set(
-        THREE.MathUtils.randFloat(-1, 1),
-        THREE.MathUtils.randFloat(-1, 1),
-        THREE.MathUtils.randFloat(-1, 1)
-      ).normalize();
+      tempDirection
+        .set(
+          THREE.MathUtils.randFloat(-1, 1),
+          THREE.MathUtils.randFloat(-1, 1),
+          THREE.MathUtils.randFloat(-1, 1)
+        )
+        .normalize();
 
       raycaster.set(tempOrigin, tempDirection);
 
@@ -73,7 +77,11 @@ function Object() {
       if (intersects.length > 0) {
         // use the closest point of intersection
         const intersectionPoint = intersects[0].point;
-        positions.push(intersectionPoint.x, intersectionPoint.y, intersectionPoint.z);
+        positions.push(
+          intersectionPoint.x,
+          intersectionPoint.y,
+          intersectionPoint.z
+        );
 
         const intensity = Math.random() * 0.5 + 0.5;
         color.setRGB(intensity, intensity, intensity + Math.random() * 0.2);
@@ -82,8 +90,14 @@ function Object() {
     }
 
     const objectGeometry = new THREE.BufferGeometry();
-    objectGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-    objectGeometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+    objectGeometry.setAttribute(
+      "position",
+      new THREE.Float32BufferAttribute(positions, 3)
+    );
+    objectGeometry.setAttribute(
+      "color",
+      new THREE.Float32BufferAttribute(colors, 3)
+    );
 
     const objectMaterial = new THREE.PointsMaterial({
       size: 1.0,
@@ -97,7 +111,7 @@ function Object() {
   }, []);
 
   return (
-    <group scale={0.1} rotation={[0,Math.PI/2,0]}>
+    <group scale={0.1} rotation={[0, Math.PI / 2, 0]}>
       <points geometry={geometry} material={material} />
     </group>
   );

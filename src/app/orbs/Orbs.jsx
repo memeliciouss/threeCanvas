@@ -1,6 +1,7 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, Suspense } from "react";
 import { OrbitControls, Environment } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
+import { Loader } from "@/components/Loader";
 
 const RotatingCube = ({ position, axes = ["x", "y"], reflective = false }) => {
   const [orb, chooseOrb] = useState(false);
@@ -65,6 +66,7 @@ export default function Orbs() {
       }}
     >
       <OrbitControls enableZoom={false} enableRotate enablePan={false} />
+      <Suspense fallback={<Loader/>}>
       <Environment
         gl={{ toneMappingExposure: 0.1 }}
         files="/orbs/star_night.hdr"
@@ -73,6 +75,7 @@ export default function Orbs() {
       <RotatingCube position={[-4, 0, 0]} axes={["x", "y"]} />
       <RotatingCube position={[0, 0, 0]} axes={["y", "z"]} />
       <RotatingCube position={[4, 0, 0]} axes={["x", "z"]} />
+      </Suspense>
     </Canvas>
   );
 }

@@ -1,10 +1,11 @@
 "use client";
 import { Canvas, useLoader, useFrame } from "@react-three/fiber";
 import { Environment, OrbitControls, useGLTF } from "@react-three/drei";
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
 import { useMemo } from "react";
+import { Loader } from "@/components/Loader";
 
 export function MirrorOrbs({ count = 60 }) {
   // Create random positions once
@@ -161,20 +162,21 @@ export default function WeepingAngel() {
     >
       <ambientLight intensity={0.5} />
       <ParallaxCamera />
-
-      <Environment
-        files={[
-          "/angel/px.jpg",
-          "/angel/nx.jpg",
-          "/angel/py.jpg",
-          "/angel/ny.jpg",
-          "/angel/pz.jpg",
-          "/angel/nz.jpg",
-        ]}
-        background
-      />
-      <Angel />
-      <MirrorOrbs />
+      <Suspense fallback={<Loader />}>
+        <Environment
+          files={[
+            "/angel/px.jpg",
+            "/angel/nx.jpg",
+            "/angel/py.jpg",
+            "/angel/ny.jpg",
+            "/angel/pz.jpg",
+            "/angel/nz.jpg",
+          ]}
+          background
+        />
+        <Angel />
+        <MirrorOrbs />
+      </Suspense>
     </Canvas>
   );
 }
